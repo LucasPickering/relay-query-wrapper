@@ -1,0 +1,23 @@
+{
+  "name": "relay-optional-query",
+  "version": "1.0.0-alpha.0",
+  "description": "React+Relay tool to easily render optional components based on query output",
+  "main": "index.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LucasPickering/relay-optional-query.git"
+  },
+  "keywords": [
+    "react",
+    "relay"
+  ],
+  "author": "Lucas Pickering <lucas@lucaspickering.me>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/LucasPickering/relay-optional-query/issues"
+  },
+  "homepage": "https://github.com/LucasPickering/relay-optional-query#readme"
+}
