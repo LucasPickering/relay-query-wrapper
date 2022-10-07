@@ -2,10 +2,13 @@
   "name": "relay-optional-query",
   "version": "1.0.0-alpha.0",
   "description": "React+Relay tool to easily render optional components based on query output",
-  "main": "index.ts",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "author": "Lucas Pickering <lucas@lucaspickering.me>",
+  "license": "MIT",
+  "homepage": "https://github.com/LucasPickering/relay-optional-query#readme",
+  "bugs": {
+    "url": "https://github.com/LucasPickering/relay-optional-query/issues"
   },
+  "main": "index.ts",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/LucasPickering/relay-optional-query.git"
@@ -14,10 +17,25 @@
     "react",
     "relay"
   ],
-  "author": "Lucas Pickering <lucas@lucaspickering.me>",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/LucasPickering/relay-optional-query/issues"
+  "devDependencies": {
+    "@lucaspickering/eslint-config": "^1.0.4",
+    "@lucaspickering/tsconfig": "^1.0.0",
+    "@types/react": "^18.0.21",
+    "@types/react-relay": "^14.1.2",
+    "@types/relay-runtime": "^14.1.3",
+    "eslint": "^8.24.0",
+    "react": "^18.2.0",
+    "react-relay": "^14.1.0",
+    "relay-runtime": "^14.1.0",
+    "typescript": "^4.8.4"
   },
-  "homepage": "https://github.com/LucasPickering/relay-optional-query#readme"
+  "peerDependencies": {
+    "react": ">=16.0.0",
+    "react-relay": ">=14.0.0",
+    "relay-runtime": ">=14.0.0"
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
 }
