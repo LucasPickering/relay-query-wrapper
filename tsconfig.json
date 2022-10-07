@@ -1,7 +1,10 @@
 {
   "extends": "@lucaspickering/tsconfig",
   "compilerOptions": {
-    "baseUrl": "src"
+    "baseUrl": "src",
+    "declaration": true,
+    "noEmit": false,
+    "outDir": "./dist"
   },
   "include": ["src", "./*.js"],
   "exclude": ["./build/**"]
