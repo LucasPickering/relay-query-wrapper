@@ -1,7 +1,7 @@
 # relay-query-wrapper
 
-![npm version](https://img.shields.io/github/license/LucasPickering/relay-optional-query)
-[![npm version](https://img.shields.io/npm/v/relay-optional-query)](https://www.npmjs.com/package/relay-optional-query)
+![npm version](https://img.shields.io/github/license/LucasPickering/relay-query-wrapper)
+[![npm version](https://img.shields.io/npm/v/relay-query-wrapper)](https://www.npmjs.com/package/relay-query-wrapper)
 
 A simple higher-order component that makes it easy to create complex Relay component trees. This makes it easy to:
 
