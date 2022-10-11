@@ -25,28 +25,31 @@ interface Props {
   filmsConnectionKey: FilmList_filmsConnection$key;
 }
 
-const FilmList: React.FC = ({ filmsConnectionKey }) => {
+const FilmList: React.FC<Props> = ({ filmsConnectionKey }) => {
   // This component just consumes a fragment key
-  const filmsConnection = useFragment(graphql`
-    fragment FilmList_filmsConnection on FilmsConnection {
-      films {
-        id
-        title
+  const filmsConnection = useFragment(
+    graphql`
+      fragment FilmList_filmsConnection on FilmsConnection {
+        films {
+          id
+          title
+        }
       }
-    }
-  `);
+    `,
+    filmsConnectionKey
+  );
 
   return (
     <ul>
-      {films.map((film) => (
+      {filmsConnection.films.map((film) => (
         <li key={film.id}>{film.title}</li>
       ))}
     </ul>
   );
 };
 
-// We have to tell withQuery what prop (in this case filmConnectionKey) we expect it to auto-populate
-export default withQuery<FilmListQuery, Props, "filmConnectionKey">({
+// We have to tell withQuery what prop (in this case filmsConnectionKey) we expect it to auto-populate
+export default withQuery<FilmListQuery, Props, "filmsConnectionKey">({
   // The query that will populate this
   query: graphql`
     query FilmListQuery {
@@ -58,7 +61,7 @@ export default withQuery<FilmListQuery, Props, "filmConnectionKey">({
   // This maps the returned query data into props for your component
   dataToProps: (data) => data.allFilms && { filmsConnectionKey: data.allFilms },
   // Rendered *while the query is loading*
-  fallbackElement: "Loading...",
+  fallbackElement: <span>Loading...</span>,
 })(FilmList);
 ```
 
@@ -93,12 +96,12 @@ interface Props {
   color: string;
 }
 
-const FilmList: React.FC = ({ filmsConnectionKey, color }) => {
+const FilmList: React.FC<Props> = ({ filmsConnectionKey, color }) => {
   // Component contents are the same as the basic example, but you can access
   // the color prop now
 };
 
-export default withQuery<FilmListQuery, Props, "filmConnectionKey">({
+export default withQuery<FilmListQuery, Props, "filmsConnectionKey">({
   // This still only needs to populate the Relay key. All other props are pass
   // through transparently.
   dataToProps: (data) => data.allFilms && { filmsConnectionKey: data.allFilms },
@@ -137,7 +140,7 @@ const filmListQuery = graphql`
 // FilmList.tsx
 // Omitting component definition from the basic example...
 
-export default withQuery<queriesProblemQuery, Props, "filmConnectionKey">({
+export default withQuery<queriesProblemQuery, Props, "filmsConnectionKey">({
   // The query that will populate this
   query: filmListQuery,
   // Omitting other fields from the basic example...
@@ -187,22 +190,23 @@ const HomePage: React.FC = () => {
 ```typescript
 // FilmDetail.tsx
 interface Props {
-  filmsConnectionKey: FilmDetail_film$key;
+  filmKey: FilmDetail_film$key;
 }
 
-const FilmDetail: React.FC = ({ filmsConnectionKey }) => {
-  const film = useFragment(graphql`
-    fragment FilmDetail_film on Film {
-      title
-    }
-  `);
+const FilmDetail: React.FC<Props> = ({ filmKey }) => {
+  const film = useFragment(
+    graphql`
+      fragment FilmDetail_film on Film {
+        title
+      }
+    `,
+    filmKey
+  );
 
   return <div>The name of this film is: {film.title}</div>;
 };
 
-// We have to tell withQuery what prop (in this case filmConnectionKey) we expect it to auto-populate
-export default withQuery<FilmListQuery, Props, "filmConnectionKey">({
-  // The query that will populate this
+export default withQuery<FilmListQuery, Props, "filmKey">({
   query: graphql`
     query FilmQuery($filmID: ID!) {
       film(filmID: $filmID) {
@@ -211,11 +215,11 @@ export default withQuery<FilmListQuery, Props, "filmConnectionKey">({
     }
   `,
   dataToProps: (data) => data.film && { filmKey: data.film },
-  fallbackElement: "Loading...",
+  fallbackElement: <span>Loading...</span>,
   // Rendered when no search term is entered, i.e. before query starts
-  preloadElement: "Search for a film",
+  preloadElement: <span>Search for a film</span>,
   // Rendered if the query comes up empty, i.e. dataToProps returns null
-  noDataElement: "Film not found!",
+  noDataElement: <span>Film not found!</span>,
 })(FilmList);
 ```
 
