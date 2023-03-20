@@ -257,3 +257,84 @@ const HomePage: React.FC = () => {
   );
 };
 ```
+
+### Loading Query Ref from Context
+
+Occasionally, you want to store a Relay query ref in context rather than passing it as a prop. You can easily create a consumer of this using `withContextQuery`:
+
+```typescript
+// FilmListQueryContext.ts
+const FilmListQueryContext = React.createContext<{
+  // The query ref *has* to be stored under this key!
+  queryRef: PreloadedQuery<FilmListQuery> | null | undefined;
+}>({});
+```
+
+```typescript
+import FilmListQueryContext from "./FilmListQueryContext";
+
+// FilmList.tsx
+interface Props {
+  filmsConnectionKey: FilmList_filmsConnection$key;
+}
+
+const FilmList: React.FC<Props> = ({ filmsConnectionKey }) => {
+  // This component just consumes a fragment key
+  const filmsConnection = useFragment(
+    graphql`
+      fragment FilmList_filmsConnection on FilmsConnection {
+        films {
+          id
+          title
+        }
+      }
+    `,
+    filmsConnectionKey
+  );
+
+  return (
+    <ul>
+      {filmsConnection.films.map((film) => (
+        <li key={film.id}>{film.title}</li>
+      ))}
+    </ul>
+  );
+};
+
+export default withContextQuery<FilmListQuery, Props>({
+  // We'll load the queryRef from this context, instead of a prop
+  context: FilmListQueryContext,
+  query: graphql`
+    query FilmListQuery {
+      allFilms {
+        ...FilmList_filmsConnection
+      }
+    }
+  `,
+  dataToProps: (data) => data.allFilms && { filmsConnectionKey: data.allFilms },
+  fallbackElement: <span>Loading...</span>,
+})(FilmList);
+```
+
+```typescript
+// HomePage.tsx
+import FilmList from "./FilmList";
+import FilmListQueryContext from "./FilmListQueryContext";
+import type { FilmListQuery as FilmListQueryType } from "./__generated__/FilmListQuery.graphql";
+import FilmListQuery from "./__generated__/FilmListQuery.graphql";
+
+const HomePage: React.FC = () => {
+  const [queryRef, loadQuery] =
+    useQueryLoader<FilmListQueryType>(FilmListQuery);
+
+  useEffect(() => {
+    loadQuery({});
+  }, [loadQuery]);
+
+  return (
+    <FilmListQueryContext.Provider value={{ queryRef }}>
+      <FilmList />
+    </FilmListQueryContext.Provider>
+  );
+};
+```

@@ -1,8 +1,9 @@
-import React, { Suspense } from "react";
+import { Suspense } from "react";
 import { PreloadedQuery, usePreloadedQuery } from "react-relay";
 import { GraphQLTaggedNode, OperationType } from "relay-runtime";
+import { QueryRef } from "types";
 
-interface Options<
+export interface Options<
   Query extends OperationType,
   Props,
   DataKeys extends keyof Props
@@ -18,9 +19,9 @@ interface Options<
 
 /**
  * Get a type for the props of a wrapping component, given:
- * - Wrapper props (T)
- * - Underlying props, defined by the wrapped component (Props)
- * - Data props, defined by the wrapped component by derived from Relay state
+ * - Wrapper props (OuterProps)
+ * - Underlying props, defined by the wrapped component (InnerProps)
+ * - Data props, defined by the wrapped component, which hold Relay keys
  */
 type AllProps<
   OuterProps,
@@ -43,11 +44,7 @@ type SuspenseProps<
   Query extends OperationType,
   InnerProps,
   DataKeys extends keyof InnerProps
-> = AllProps<
-  { queryRef: PreloadedQuery<Query> | null | undefined },
-  InnerProps,
-  DataKeys
->;
+> = AllProps<QueryRef<Query>, InnerProps, DataKeys>;
 
 /**
  * Higher-order component to wrap a component with the logic necessary to
